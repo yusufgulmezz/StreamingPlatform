@@ -14,6 +14,11 @@ export default function UsersPage() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [subInfo, setSubInfo] = useState<SubscriptionInfo | null>(null);
   const [changeResult, setChangeResult] = useState<string | null>(null);
+  
+  // Yeni kullanıcı formu state'leri
+  const [isCreating, setIsCreating] = useState(false);
+  const [newUser, setNewUser] = useState({ username: '', email: '', age: '', subscriptionType: 'BASIC' });
+  const [createResult, setCreateResult] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
 
   useEffect(() => {
     userApi.getAll().then(setUsers).finally(() => setLoading(false));
@@ -46,6 +51,28 @@ export default function UsersPage() {
     }
   }
 
+  async function handleCreateUser(e: React.FormEvent) {
+    e.preventDefault();
+    if (!newUser.username || !newUser.email || !newUser.age) return;
+    try {
+      await userApi.create({
+        username: newUser.username,
+        email: newUser.email,
+        age: Number(newUser.age),
+        subscriptionType: newUser.subscriptionType as any
+      });
+      setCreateResult({ type: 'success', msg: `✅ Kullanıcı başarıyla oluşturuldu: ${newUser.username}` });
+      setNewUser({ username: '', email: '', age: '', subscriptionType: 'BASIC' });
+      setIsCreating(false);
+      
+      const updated = await userApi.getAll();
+      setUsers(updated);
+      setTimeout(() => setCreateResult(null), 3000);
+    } catch {
+      setCreateResult({ type: 'error', msg: '❌ Kullanıcı eklenirken hata oluştu!' });
+    }
+  }
+
   if (loading) {
     return (
       <div className="page">
@@ -74,7 +101,48 @@ export default function UsersPage() {
 
       {/* Kullanıcı Listesi */}
       <div className="section">
-        <h2 className="section-title">👥 Kullanıcı Listesi</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h2 className="section-title" style={{ margin: 0 }}>👥 Kullanıcı Listesi</h2>
+          <button className="btn btn-sm btn-primary" onClick={() => setIsCreating(!isCreating)}>
+            {isCreating ? '✕ İptal' : '➕ Yeni Kullanıcı Ekle'}
+          </button>
+        </div>
+
+        {createResult && (
+          <div className={`status-message ${createResult.type === 'success' ? 'status-success' : 'status-error'}`} style={{ marginBottom: '1rem' }}>
+            {createResult.msg}
+          </div>
+        )}
+
+        {isCreating && (
+          <form className="demo-panel" style={{ marginBottom: '1.5rem', borderLeft: '3px solid var(--accent-purple)' }} onSubmit={handleCreateUser}>
+            <div className="demo-panel-title">✨ Yeni Kullanıcı Oluştur</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+              <div className="form-group">
+                <label className="form-label">Kullanıcı Adı</label>
+                <input className="form-input" required value={newUser.username} onChange={e => setNewUser({...newUser, username: e.target.value})} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">E-posta</label>
+                <input className="form-input" type="email" required value={newUser.email} onChange={e => setNewUser({...newUser, email: e.target.value})} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Yaş</label>
+                <input className="form-input" type="number" required min="1" value={newUser.age} onChange={e => setNewUser({...newUser, age: e.target.value})} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Abonelik Tipi</label>
+                <select className="form-select" value={newUser.subscriptionType} onChange={e => setNewUser({...newUser, subscriptionType: e.target.value})}>
+                  <option value="BASIC">Basic (720p)</option>
+                  <option value="STANDARD">Standard (1080p)</option>
+                  <option value="PREMIUM">Premium (4K)</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" className="btn btn-success">Kaydet</button>
+          </form>
+        )}
+
         <div className="users-list">
           {users.map(user => (
             <div
