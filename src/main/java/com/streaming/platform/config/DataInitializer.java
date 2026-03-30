@@ -18,6 +18,11 @@ public class DataInitializer {
     @Bean
     CommandLineRunner initData(ContentRepository contentRepo, UserRepository userRepo) {
         return args -> {
+            if (contentRepo.count() > 0 || userRepo.count() > 0) {
+                System.out.println("=== Veritabanında veri bulundu, varsayılan yükleme atlandı. ===");
+                return;
+            }
+
             System.out.println("=== Örnek veriler yükleniyor ===");
 
             // --- İçerikler ---
