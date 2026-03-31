@@ -59,12 +59,30 @@ export default function PlayerPage() {
       </div>
 
       <div className="pattern-info">
-        <div className="pattern-info-title">🛡️ Proxy Pattern</div>
-        <p>
-          <strong>ContentPlayProxy</strong> sınıfı, gerçek <strong>Playable</strong> nesnesini sarmalayarak 
-          oynatma öncesinde yaş kontrolü uygular. Kullanıcı yaşı içeriğin <strong>requiredAge</strong> 
-          değerinden küçükse erişim engellenir. Bu sayede gerçek nesneye dokunmadan ek kontrol katmanı eklenir.
-        </p>
+        <div className="pattern-info-title" style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>🛡️ Proxy Design Pattern (Vekil Tasarım Deseni)</div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1.5rem' }}>
+          <div>
+            <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>🔹 Güvenlik ve Erişim Kontrolü</h4>
+            <p style={{ marginBottom: '1rem' }}>
+              Proxy (Vekil) deseni, gerçek bir nesneye (örneğin filmin kendisi) erişimi kontrol eden bir aracı nesne oluşturmamızı sağlar. 
+              Sistemimizde bir oynatma isteği geldiğinde, doğrudan film oynatılmaz; bunun yerine istek önce <code>ContentPlayProxy</code> sınıfına düşer.
+            </p>
+            <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>🔹 Separation of Concerns (Sorumlulukların Ayrılması)</h4>
+            <p>
+              İçerik (Movie, Series) sadece kendini oynatmakla ilgilenir, yaş sınırı hesaplama veya güvenlik kontrolleri içeriğin kendi kodunu kirletmez. 
+              Tüm mantıksal erişim kuralları Proxy sınıfı içerisinde izole edilmiştir.
+            </p>
+          </div>
+          <div style={{ background: 'var(--bg-elevated)', padding: '1rem', borderRadius: 'var(--radius-md)' }}>
+            <h4 style={{ color: 'var(--text-primary)', fontSize: '0.85rem', marginBottom: '0.5rem', fontFamily: 'var(--font-mono)' }}>Kontrol Akışı</h4>
+            <ol style={{ paddingLeft: '1.2rem', color: 'var(--text-secondary)', fontSize: '0.8rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+              <li>İstemci <code>play()</code> komutu gönderir.</li>
+              <li>İstek <strong>Proxy</strong> nesnesine gelir.</li>
+              <li>Proxy, kullanıcının yaşını (<code>user.age</code>) ve içeriğin sınırını (<code>content.requiredAge</code>) kıyaslar.</li>
+              <li>Yaş yetiyorsa asıl nesnenin <code>play()</code> metodu çağrılır, yetmiyorsa işlem reddedilir.</li>
+            </ol>
+          </div>
+        </div>
       </div>
 
       <div className="player-demo">

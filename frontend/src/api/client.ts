@@ -18,6 +18,8 @@ import type { Content, ApiResult } from '../types';
 export const contentApi = {
   getAll: () => request<Content[]>('/contents'),
   getById: (id: number) => request<Content>(`/contents/${id}`),
+  create: (content: Partial<Content>) =>
+    request<Content>('/contents', { method: 'POST', body: JSON.stringify(content) }),
   play: (contentId: number, userId: number) =>
     request<ApiResult>(`/contents/${contentId}/play?userId=${userId}`, { method: 'POST' }),
   download: (contentId: number) =>

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 
 /**
  * Tüm içerik türlerinin temel abstract sınıfı.
@@ -18,6 +20,18 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "contentType",
+        visible = true
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Movie.class, name = "Movie"),
+        @JsonSubTypes.Type(value = Series.class, name = "Series"),
+        @JsonSubTypes.Type(value = Documentary.class, name = "Documentary"),
+        @JsonSubTypes.Type(value = Podcast.class, name = "Podcast")
+})
 public abstract class Content {
 
     @Id

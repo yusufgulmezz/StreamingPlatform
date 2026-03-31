@@ -49,6 +49,15 @@ public class ContentController {
     }
 
     @Operation(
+            summary = "Yeni içerik ekle",
+            description = "Sisteme yeni bir içerik (Movie, Series, Documentary, Podcast) ekler. JSON içerisine 'contentType' alanı zorunlu olarak eklenmelidir."
+    )
+    @PostMapping
+    public ResponseEntity<Content> addContent(@RequestBody Content content) {
+        return ResponseEntity.ok(contentService.saveContent(content));
+    }
+
+    @Operation(
             summary = "İçerik sil",
             description = "Belirtilen ID'ye sahip içeriği veritabanından kalıcı olarak siler."
     )

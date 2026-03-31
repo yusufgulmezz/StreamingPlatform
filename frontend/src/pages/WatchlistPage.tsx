@@ -73,13 +73,29 @@ export default function WatchlistPage() {
       </div>
 
       <div className="pattern-info">
-        <div className="pattern-info-title">🔄 Iterator Pattern</div>
-        <p>
-          <strong>Watchlist</strong> sınıfı <code>Iterable&lt;Content&gt;</code> implement eder ve 
-          özel <strong>WatchlistIterator</strong> ile sıralı erişim sağlar. İç veri yapısı (List) 
-          dışarıya açılmaz — sadece <code>hasNext()</code> ve <code>next()</code> ile gezinilir. 
-          İç yapı değişse bile (ArrayList → LinkedList) dış kod etkilenmez.
-        </p>
+        <div className="pattern-info-title" style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>🔄 Iterator Design Pattern (Yineleyici Tasarım Deseni)</div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+          <div>
+            <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>🔹 Veri Yapısını Gizleme (Encapsulation)</h4>
+            <p style={{ marginBottom: '1rem' }}>
+              İzleme Listesi (Watchlist) arka planda karmaşık bir veri yapısı kullanabilir (örn. List, Set veya Tree). 
+              Iterator deseni sayesinde, listeyi okuyacak olan kodun (istemci) arka plandaki bu veri yapılarını bilmesine gerek kalmaz.
+            </p>
+            <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>🔹 Standartlaştırılmış Gezinme</h4>
+            <p>
+              Listenin elemanları üzerinde sadece <code>hasNext()</code> (sırada eleman var mı?) ve <code>next()</code> (sıradakini getir) 
+              metotları kullanılarak standart ve güvenli bir şekilde dolaşılır. Dış müdahaleler (yanlış indexleme vb.) önlenmiş olur.
+            </p>
+          </div>
+          <div style={{ background: 'var(--bg-elevated)', padding: '1rem', borderRadius: 'var(--radius-md)' }}>
+            <h4 style={{ color: 'var(--text-primary)', fontSize: '0.85rem', marginBottom: '0.5rem', fontFamily: 'var(--font-mono)' }}>Uygulama Mimarisi</h4>
+            <ul style={{ paddingLeft: '1.2rem', color: 'var(--text-secondary)', fontSize: '0.8rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+              <li><strong>Koleksiyon:</strong> <code>Watchlist</code> sınıfı kalıtımla standart <code>Iterable</code> arayüzünü uygular.</li>
+              <li><strong>İteratör Sınıfı:</strong> Sırayı tutmak için özel <code>WatchlistIterator</code> nesnesi döndürülür.</li>
+              <li><strong>Esneklik:</strong> Yarın veritabanı veya liste yapımız değişip Array yerine Node Tree olsa bile, Frontend kodu aynı kalır.</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
       <div className="watchlist-container">

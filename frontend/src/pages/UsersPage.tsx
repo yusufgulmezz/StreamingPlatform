@@ -89,14 +89,29 @@ export default function UsersPage() {
       </div>
 
       <div className="pattern-info">
-        <div className="pattern-info-title">🎯 Strategy Pattern</div>
-        <p>
-          Her abonelik tipi (<strong>Basic</strong>, <strong>Standard</strong>, <strong>Premium</strong>) 
-          farklı bir <strong>SubscriptionStrategy</strong> concrete sınıfına karşılık gelir. 
-          Runtime'da plan değiştirildiğinde, ilgili strateji nesnesi <code>SubscriptionType.toStrategy()</code> 
-          ile oluşturulur ve <code>getMaxResolution()</code>, <code>getPrice()</code> metotları çağrılır. 
-          Yeni bir plan eklemek için sadece yeni bir strateji sınıfı yazmak yeterlidir (Open/Closed Principle).
-        </p>
+        <div className="pattern-info-title" style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>🎯 Strategy Design Pattern (Strateji Tasarım Deseni)</div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1.5rem' }}>
+          <div>
+            <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>🔹 Dinamik Algoritma Değişimi</h4>
+            <p style={{ marginBottom: '1rem' }}>
+              Uygulamamızdaki abonelik planlarının (Basic, Standard, Premium) her biri, <code>SubscriptionStrategy</code> arayüzünü uygulayan ayrı sınıflardır. 
+              Kullanıcı planını değiştirdiği anda, sistem runtime (çalışma zamanı) sırasında uygulanan stratejiyi (sınıfı) dinamik olarak değiştirir.
+            </p>
+            <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>🔹 Open/Closed Principle (Açık/Kapalı Prensibi)</h4>
+            <p>
+              Sisteme ileride "Ultra 8K" adında yeni bir abonelik eklemek istediğimizde, mevcut kodları değiştirmek (if/else blokları eklemek) yerine, 
+              sadece <code>UltraSubscription</code> adında yeni bir strateji sınıfı oluşturmamız yeterlidir.
+            </p>
+          </div>
+          <div style={{ background: 'var(--bg-elevated)', padding: '1rem', borderRadius: 'var(--radius-md)' }}>
+            <h4 style={{ color: 'var(--text-primary)', fontSize: '0.85rem', marginBottom: '0.5rem', fontFamily: 'var(--font-mono)' }}>Java Implementasyonu</h4>
+            <ul style={{ paddingLeft: '1.2rem', color: 'var(--text-secondary)', fontSize: '0.8rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+              <li><strong>Arayüz:</strong> <code>SubscriptionStrategy</code></li>
+              <li><strong>Sınıflar:</strong> <code>BasicSubscription</code>, <code>StandardSubscription</code>, <code>PremiumSubscription</code></li>
+              <li><strong>Enum Factory:</strong> <code>SubscriptionType.toStrategy()</code> ile veritabanından okunan string değer, anında ilgili nesneye dönüşür.</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
       {/* Kullanıcı Listesi */}
